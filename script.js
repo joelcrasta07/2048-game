@@ -250,7 +250,7 @@ class Game2048 {
     }
 
     moveLeft() {
-        return this.move(row => {
+        return this.move((row) => {
             const newRow = row.filter(cell => cell !== 0);
             for (let i = 0; i < newRow.length - 1; i++) {
                 if (newRow[i] === newRow[i + 1]) {
@@ -267,7 +267,7 @@ class Game2048 {
     }
 
     moveRight() {
-        return this.move(row => {
+        return this.move((row) => {
             const newRow = row.filter(cell => cell !== 0);
             for (let i = newRow.length - 1; i > 0; i--) {
                 if (newRow[i] === newRow[i - 1]) {
@@ -285,42 +285,42 @@ class Game2048 {
     }
 
     moveUp() {
-        return this.move(col => {
-            const newCol = col.filter(cell => cell !== 0);
-            for (let i = 0; i < newCol.length - 1; i++) {
-                if (newCol[i] === newCol[i + 1]) {
-                    newCol[i] *= 2;
-                    this.score += newCol[i];
-                    newCol.splice(i + 1, 1);
+        return this.move((row) => {
+            const newRow = row.filter(cell => cell !== 0);
+            for (let i = 0; i < newRow.length - 1; i++) {
+                if (newRow[i] === newRow[i + 1]) {
+                    newRow[i] *= 2;
+                    this.score += newRow[i];
+                    newRow.splice(i + 1, 1);
                 }
             }
-            while (newCol.length < 4) {
-                newCol.push(0);
+            while (newRow.length < 4) {
+                newRow.push(0);
             }
-            return newCol;
+            return newRow;
         }, true);
     }
 
     moveDown() {
-        return this.move(col => {
-            const newCol = col.filter(cell => cell !== 0);
-            for (let i = newCol.length - 1; i > 0; i--) {
-                if (newCol[i] === newCol[i - 1]) {
-                    newCol[i] *= 2;
-                    this.score += newCol[i];
-                    newCol.splice(i - 1, 1);
+        return this.move((row) => {
+            const newRow = row.filter(cell => cell !== 0);
+            for (let i = newRow.length - 1; i > 0; i--) {
+                if (newRow[i] === newRow[i - 1]) {
+                    newRow[i] *= 2;
+                    this.score += newRow[i];
+                    newRow.splice(i - 1, 1);
                     i--;
                 }
             }
-            while (newCol.length < 4) {
-                newCol.unshift(0);
+            while (newRow.length < 4) {
+                newRow.unshift(0);
             }
-            return newCol;
+            return newRow;
         }, true);
     }
 
     move(moveFunction, isVertical = false) {
-        const previousGrid = JSON.stringify(this.grid);
+        const oldGrid = JSON.stringify(this.grid);
         
         if (isVertical) {
             for (let j = 0; j < 4; j++) {
@@ -335,18 +335,20 @@ class Game2048 {
                 this.grid[i] = moveFunction([...this.grid[i]]);
             }
         }
-
-        return previousGrid !== JSON.stringify(this.grid);
+        
+        return oldGrid !== JSON.stringify(this.grid);
     }
 
     isGameOver() {
         // Check for empty cells
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
-                if (this.grid[i][j] === 0) return false;
+                if (this.grid[i][j] === 0) {
+                    return false;
+                }
             }
         }
-
+        
         // Check for possible merges
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
@@ -359,7 +361,7 @@ class Game2048 {
                 }
             }
         }
-
+        
         return true;
     }
 
