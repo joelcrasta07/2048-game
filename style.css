@@ -1,3 +1,39 @@
+:root {
+    --background-color: #faf8ef;
+    --text-color: #776e65;
+    --grid-color: #bbada0;
+    --tile-color: #eee4da;
+    --tile-2: #eee4da;
+    --tile-4: #ede0c8;
+    --tile-8: #f2b179;
+    --tile-16: #f59563;
+    --tile-32: #f67c5f;
+    --tile-64: #f65e3b;
+    --tile-128: #edcf72;
+    --tile-256: #edcc61;
+    --tile-512: #edc850;
+    --tile-1024: #edc53f;
+    --tile-2048: #edc22e;
+}
+
+[data-theme="dark"] {
+    --background-color: #1a1a1a;
+    --text-color: #d4d4d4;
+    --grid-color: #2d2d2d;
+    --tile-color: #3d3d3d;
+    --tile-2: #3d3d3d;
+    --tile-4: #4d4d4d;
+    --tile-8: #f2b179;
+    --tile-16: #f59563;
+    --tile-32: #f67c5f;
+    --tile-64: #f65e3b;
+    --tile-128: #edcf72;
+    --tile-256: #edcc61;
+    --tile-512: #edc850;
+    --tile-1024: #edc53f;
+    --tile-2048: #edc22e;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,12 +42,13 @@
 
 body {
     font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-    background-color: #faf8ef;
-    color: #776e65;
+    background-color: var(--background-color);
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     padding: 20px;
     line-height: 1.4;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -38,7 +75,7 @@ h1 {
 
 .subtitle {
     font-size: 16px;
-    color: #776e65;
+    color: var(--text-color);
 }
 
 .score-container {
@@ -46,8 +83,8 @@ h1 {
     gap: 10px;
 }
 
-.score-box {
-    background: #bbada0;
+.score-box, .stat-box {
+    background: var(--grid-color);
     padding: 10px 20px;
     border-radius: 3px;
     color: white;
@@ -55,14 +92,14 @@ h1 {
     text-align: center;
 }
 
-.score-label {
+.score-label, .stat-label {
     display: block;
     font-size: 13px;
     margin-bottom: 5px;
     text-transform: uppercase;
 }
 
-#score, #best-score {
+#score, #best-score, #moves, #time {
     font-size: 24px;
     font-weight: bold;
 }
@@ -72,16 +109,38 @@ h1 {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.game-intro {
-    flex: 1;
-    font-size: 16px;
-    margin-right: 20px;
+.game-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.control-button {
+    background: var(--grid-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 3px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.control-button:hover {
+    background: #7f6a56;
+}
+
+.game-stats {
+    display: flex;
+    gap: 10px;
 }
 
 .game-container {
-    background: #bbada0;
+    background: var(--grid-color);
     padding: 15px;
     border-radius: 6px;
     margin-bottom: 20px;
@@ -92,7 +151,7 @@ h1 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 15px;
-    background: #bbada0;
+    background: var(--grid-color);
     padding: 15px;
     border-radius: 6px;
     position: relative;
@@ -110,7 +169,7 @@ h1 {
     align-items: center;
     font-size: 35px;
     font-weight: bold;
-    color: #776e65;
+    color: var(--text-color);
     transition: all 0.15s ease;
 }
 
@@ -118,14 +177,14 @@ h1 {
     position: absolute;
     width: calc((100% - 45px) / 4);
     aspect-ratio: 1;
-    background: #eee4da;
+    background: var(--tile-color);
     border-radius: 3px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 35px;
     font-weight: bold;
-    color: #776e65;
+    color: var(--text-color);
     transition: transform 0.15s ease, opacity 0.15s ease;
     z-index: 1;
     transform: translate(0, 0);
@@ -163,19 +222,19 @@ h1 {
     }
 }
 
-.tile-2 { background: #eee4da; }
-.tile-4 { background: #ede0c8; }
-.tile-8 { background: #f2b179; color: white; }
-.tile-16 { background: #f59563; color: white; }
-.tile-32 { background: #f67c5f; color: white; }
-.tile-64 { background: #f65e3b; color: white; }
-.tile-128 { background: #edcf72; color: white; font-size: 30px; }
-.tile-256 { background: #edcc61; color: white; font-size: 30px; }
-.tile-512 { background: #edc850; color: white; font-size: 30px; }
-.tile-1024 { background: #edc53f; color: white; font-size: 25px; }
-.tile-2048 { background: #edc22e; color: white; font-size: 25px; }
+.tile-2 { background: var(--tile-2); }
+.tile-4 { background: var(--tile-4); }
+.tile-8 { background: var(--tile-8); color: white; }
+.tile-16 { background: var(--tile-16); color: white; }
+.tile-32 { background: var(--tile-32); color: white; }
+.tile-64 { background: var(--tile-64); color: white; }
+.tile-128 { background: var(--tile-128); color: white; font-size: 30px; }
+.tile-256 { background: var(--tile-256); color: white; font-size: 30px; }
+.tile-512 { background: var(--tile-512); color: white; font-size: 30px; }
+.tile-1024 { background: var(--tile-1024); color: white; font-size: 25px; }
+.tile-2048 { background: var(--tile-2048); color: white; font-size: 25px; }
 
-#new-game, #try-again {
+#new-game, #try-again, #keep-playing, #new-game-win, #share-score {
     background: #8f7a66;
     color: white;
     border: none;
@@ -186,11 +245,11 @@ h1 {
     transition: background 0.15s ease;
 }
 
-#new-game:hover, #try-again:hover {
+#new-game:hover, #try-again:hover, #keep-playing:hover, #new-game-win:hover, #share-score:hover {
     background: #7f6a56;
 }
 
-.game-over-overlay {
+.game-over-overlay, .win-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -204,23 +263,44 @@ h1 {
     z-index: 2;
 }
 
-.game-over-overlay.active {
+.game-over-overlay.active, .win-overlay.active {
     display: flex;
 }
 
-.game-over-content {
+.game-over-content, .win-content {
     text-align: center;
     padding: 20px;
 }
 
-.game-over-content h2 {
+.game-over-content h2, .win-content h2 {
     font-size: 36px;
     margin-bottom: 10px;
 }
 
-.game-over-content p {
+.game-over-content p, .win-content p {
     font-size: 18px;
     margin-bottom: 20px;
+}
+
+.game-tips {
+    background: var(--grid-color);
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.game-tips h3 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.game-tips ul {
+    list-style-position: inside;
+    color: white;
+}
+
+.game-tips li {
+    margin-bottom: 5px;
 }
 
 @media (max-width: 520px) {
@@ -238,9 +318,14 @@ h1 {
         align-items: flex-start;
     }
     
-    .game-intro {
-        margin-bottom: 10px;
-        margin-right: 0;
+    .game-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .game-stats {
+        width: 100%;
+        justify-content: space-between;
     }
     
     .tile {

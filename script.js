@@ -4,21 +4,32 @@ class Game2048 {
         this.score = 0;
         this.bestScore = parseInt(localStorage.getItem('bestScore')) || 0;
         this.gameOver = false;
+        this.won = false;
+        this.moves = 0;
+        this.startTime = null;
+        this.timer = null;
         this.touchStartX = 0;
         this.touchStartY = 0;
         this.gridContainer = document.querySelector('.grid-container');
+        this.previousState = null;
         this.setupNewGame();
         this.setupEventListeners();
+        this.loadTheme();
     }
 
     setupNewGame() {
         this.grid = Array(4).fill().map(() => Array(4).fill(0));
         this.score = 0;
         this.gameOver = false;
+        this.won = false;
+        this.moves = 0;
+        this.previousState = null;
         this.addNewTile();
         this.addNewTile();
         this.updateDisplay();
         document.querySelector('.game-over-overlay').classList.remove('active');
+        document.querySelector('.win-overlay').classList.remove('active');
+        this.startTimer();
     }
 
     setupEventListeners() {
@@ -36,6 +47,78 @@ class Game2048 {
         document.getElementById('try-again').addEventListener('click', () => {
             this.setupNewGame();
         });
+        document.getElementById('keep-playing').addEventListener('click', () => {
+            document.querySelector('.win-overlay').classList.remove('active');
+        });
+        document.getElementById('new-game-win').addEventListener('click', () => {
+            this.setupNewGame();
+        });
+        document.getElementById('share-score').addEventListener('click', () => {
+            this.shareScore();
+        });
+        document.getElementById('undo').addEventListener('click', () => {
+            this.undo();
+        });
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            this.toggleTheme();
+        });
+    }
+
+    loadTheme() {
+        const theme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    }
+
+    startTimer() {
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+        this.startTime = Date.now();
+        this.timer = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('time').textContent = `${minutes}:${seconds}`;
+        }, 1000);
+    }
+
+    saveState() {
+        this.previousState = {
+            grid: JSON.parse(JSON.stringify(this.grid)),
+            score: this.score,
+            moves: this.moves
+        };
+    }
+
+    undo() {
+        if (this.previousState) {
+            this.grid = JSON.parse(JSON.stringify(this.previousState.grid));
+            this.score = this.previousState.score;
+            this.moves = this.previousState.moves;
+            this.previousState = null;
+            this.updateDisplay();
+        }
+    }
+
+    shareScore() {
+        const text = `I scored ${this.score} points in 2048! Can you beat my score? Play at https://joelcrasta07.github.io/2048-game/`;
+        if (navigator.share) {
+            navigator.share({
+                title: '2048 Game Score',
+                text: text
+            });
+        } else {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Score copied to clipboard!');
+            });
+        }
     }
 
     handleKeyPress(event) {
@@ -68,8 +151,11 @@ class Game2048 {
         }
 
         if (moved) {
+            this.saveState();
+            this.moves++;
             this.addNewTile();
             this.updateDisplay();
+            this.checkWin();
             if (this.isGameOver()) {
                 this.gameOver = true;
                 this.showGameOver();
@@ -124,9 +210,28 @@ class Game2048 {
         }
     }
 
+    checkWin() {
+        if (!this.won) {
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 4; j++) {
+                    if (this.grid[i][j] === 2048) {
+                        this.won = true;
+                        document.querySelector('.win-overlay').classList.add('active');
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     showGameOver() {
         document.getElementById('final-score').textContent = this.score;
+        document.getElementById('final-time').textContent = document.getElementById('time').textContent;
+        document.getElementById('final-moves').textContent = this.moves;
         document.querySelector('.game-over-overlay').classList.add('active');
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
     }
 
     addNewTile() {
@@ -293,8 +398,9 @@ class Game2048 {
             }
         }
 
-        // Update score
+        // Update score and stats
         document.getElementById('score').textContent = this.score;
+        document.getElementById('moves').textContent = this.moves;
         if (this.score > this.bestScore) {
             this.bestScore = this.score;
             localStorage.setItem('bestScore', this.bestScore);

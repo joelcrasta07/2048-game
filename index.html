@@ -32,8 +32,21 @@
             </div>
         </div>
         <div class="above-game">
-            <p class="game-intro">Use your <strong>arrow keys</strong> or <strong>WASD</strong> to move the tiles. When two tiles with the same number touch, they <strong>merge into one!</strong></p>
-            <button id="new-game">New Game</button>
+            <div class="game-controls">
+                <button id="new-game">New Game</button>
+                <button id="undo" class="control-button" title="Undo last move">↩️</button>
+                <button id="theme-toggle" class="control-button" title="Toggle theme">🌓</button>
+            </div>
+            <div class="game-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Moves</span>
+                    <span id="moves">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Time</span>
+                    <span id="time">00:00</span>
+                </div>
+            </div>
         </div>
         <div class="game-container">
             <div class="grid-container">
@@ -43,9 +56,28 @@
                 <div class="game-over-content">
                     <h2>Game Over!</h2>
                     <p>Your score: <span id="final-score">0</span></p>
+                    <p>Time played: <span id="final-time">00:00</span></p>
+                    <p>Total moves: <span id="final-moves">0</span></p>
                     <button id="try-again">Try again</button>
+                    <button id="share-score">Share Score</button>
                 </div>
             </div>
+            <div class="win-overlay">
+                <div class="win-content">
+                    <h2>You Win!</h2>
+                    <p>Keep going to reach a higher score!</p>
+                    <button id="keep-playing">Keep Playing</button>
+                    <button id="new-game-win">New Game</button>
+                </div>
+            </div>
+        </div>
+        <div class="game-tips">
+            <h3>Tips & Tricks</h3>
+            <ul>
+                <li>Keep your highest number in a corner</li>
+                <li>Build a descending sequence of numbers</li>
+                <li>Don't spread your high numbers</li>
+            </ul>
         </div>
     </div>
     <script src="script.js"></script>
