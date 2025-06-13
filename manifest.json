@@ -1,0 +1,38 @@
+{
+  "name": "2048 Game Enhanced",
+  "short_name": "2048",
+  "description": "Enhanced 2048 puzzle game with multiple board sizes, themes, achievements, and statistics",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#faf8ef",
+  "theme_color": "#faf8ef",
+  "orientation": "portrait",
+  "categories": ["games", "entertainment"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "features": [
+    "Multiple board sizes (3x3, 4x4, 5x5, 6x6)",
+    "Multiple themes (Light, Dark, Neon, Retro, Nature)",
+    "Achievement system",
+    "Statistics tracking",
+    "Sound effects",
+    "Auto-save functionality",
+    "Undo moves",
+    "Touch and keyboard controls"
+  ],
+  "screenshots": [
+    {
+      "src": "favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ]
+}
